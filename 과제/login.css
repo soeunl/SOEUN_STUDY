@@ -1,0 +1,433 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans+KR:wght@100..900&display=swap');
+
+* {
+  color: #000;
+  box-sizing: border-box;
+  outline: none;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+html {
+  font-size: 13px;
+  background: #f8f8f8;
+}
+
+/* 스타일 초기화 S*/
+body {
+  margin: 0 auto;
+  max-width: 720px;
+  min-width: 360px;
+  background: #FFF;
+}
+
+ul, ol, dl, dt, dd {
+  margin: 0;
+  padding: 0;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+img {
+  border: 0;
+}
+/* 스타일 초기화 E*/
+
+/* 공통 스타일 S */
+h3 {
+  font-size: 1.538rem;
+  color: #212121;
+  text-align: center;
+  line-height: 1;
+  padding: 20px;
+}
+
+.montserrat {
+  font-family: "Montserrat", sans-serif;
+}
+/* 공통 스타일 E */
+
+/* 헤더 영역 S */
+header .site-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 66px;
+  border-bottom: 1px solid #e6e6e6;
+  padding: 0px 15px;
+}
+
+header .logo img {
+  height: 34px;
+}
+
+header .site-top i {
+  font-size: 2rem;
+}
+
+header .site-top .left i {
+  margin-right: 10px;
+}
+
+header .site-top .right i {
+  margin-left: 10px;
+}
+
+header .site-top2 {
+  border-bottom: 1px solid #e7e7e7;
+  height: 50px;
+  font-size: 1.538rem;
+  font-weight: 700;
+  color: #212121;
+  text-align: center;
+  line-height: 2.3;
+  position: relative;
+}
+
+.site-top2 i {
+  font-size: 2rem;
+  position: absolute;
+  left: 10px;
+  top: 12px;
+}
+/* 헤더 영역 E */
+
+/* 로그인 영역 S */
+.login .login-box {
+  padding: 30px 15px 40px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #dfe1e5;
+  margin-bottom: 30px;
+}
+
+.no-login .no-login-box {
+  background-color: #ffffff;
+}
+
+.login legend {
+  font-size: 18px;
+  color: #333333;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 19px;
+}
+
+.login .login-box #loginid,
+.login .login-box #loginpw,
+.no-login .no-login-box #orderid,
+.no-login .no-login-box #orderpw {
+  border: 1px solid #e5e5e5;
+  border-radius: 3px;
+  width: 100%;
+  height: 45px;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 0 10px; 
+  margin-bottom: 10px;
+}
+
+.login .login-box #loginpw,
+.no-login .no-login-box #orderpw {
+  margin-bottom: 15px;
+}
+
+input[type='checkbox'] {
+  display: none;
+}
+
+input[type='checkbox']+label {
+  padding-left: 35px;
+  background: url('images/chk.png') no-repeat left center;
+  background-size: 25px;
+  display: inline-block;
+  height: 35px;
+  line-height: 35px;
+}
+
+input[type='checkbox']:checked+label {
+  background: url('images/chk_on.png') no-repeat left center;
+  background-size: 25px;
+}
+
+.login .check label {
+  margin-right: 15px;
+  font-size: 13px;
+  color: #212121;
+  cursor: pointer;
+}
+
+.login .submit {
+  width: 100%;
+  display: block;
+  height: 45px;
+  border: 0;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  background-color: #8769f0;
+  border-radius: 3px;
+  text-align: center;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.login .login-find {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.login .login-find a {
+  color: #212121;
+  font-size: 12px;
+  padding: 0 15px;
+  position: relative;
+}
+
+.login .login-find a:not(.last)::after {
+  content: ''; 
+  display: block;
+  width: 1.2px;
+  height: 12px;
+  background: #212121;
+  position: absolute;
+  top: 4px;
+  left: 80px;
+}
+
+/* 로그인 영역 E */
+
+/* 비회원 주문조회 영역 S */
+
+.sns-login {
+  width: auto;
+  padding-bottom: 45px;
+  border-bottom: 1px solid #dfe1e5;
+}
+
+.sns-login h2 {
+  font-size: 18px;
+  color: #333333;
+  font-weight: 700;
+  line-height: 1;
+  padding: 10px 15px 10px;
+}
+
+.sns-login .sns-login2 {
+  display: flex;
+  justify-content:space-around;
+}
+
+.sns-login .sns-login2 img {
+  width: calc(100% - 10px);
+  max-width: 230px;
+  display: block;
+}
+
+.no-login {
+  background-color: #ffffff;
+  padding: 30px 15px 30px;
+}
+
+.no-login h2 {
+  line-height: 1;
+  font-size: 18px;
+}
+
+.no-login p {
+  color: #8b8b8b;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.no-login .no-login-box .order-view {
+  border: 1px solid #8769f0;
+  background-color: #ffffff;
+  color: #8769f0;
+  width: 100%;
+  height: 45px;
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 3px;
+  text-align: center;
+  cursor: pointer;
+}
+/* 비회원 주문조회 영역 E */
+
+/* 푸터 영역 S */
+footer {
+  background: #f9f9f9;
+  padding: 25px 0 80px;
+  margin-top: 25px;
+}
+
+footer .logo img{
+  width: 79px;
+  display: block;
+  margin: 0 auto 12px;
+} 
+
+footer .center-phone {
+  border: 2px solid #2a2a2a;
+  border-radius: 20px;
+  display: block;
+  height: 35px;
+  line-height: 31px;
+  width: 190px;
+  margin: 0 auto 7px;
+  font-size: 1.538rem;
+  font-weight: 800;
+  text-align: center;
+  font-weight: 900;
+}
+
+footer .center-phone span {
+  font-size: 1.538rem;
+  font-weight: 800;
+  font-weight: 900;
+  font-family: "Montserrat", sans-serif;
+  position: relative;
+  left: -3px;
+  bottom: -3px;
+}
+
+footer .center-phone img {
+  height: 16px;
+  vertical-align: middle;
+}
+
+footer .bank-info {
+  font-size: 0.923rem;
+  color: #2a2a2a;
+  text-align: center;
+}
+
+footer .bank-info span {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+footer .company-info {
+  text-align: center;
+  margin: 8px 0 8px;
+  font-size: 0.923rem;
+  color: #878787;
+  font-weight: 700;
+}
+
+footer .company-info img {
+  width: 15px;
+  vertical-align: middle;
+}
+
+footer .links {
+  text-align:center
+}
+
+footer .links a {
+  font-size: 0.846rem;
+  font-weight: 700;
+  padding: 3px 11px;
+  color: #878787;
+  position: relative;
+}
+
+footer .links a:not(.last)::after {
+  /* .last만 제외하고 가상 요소 추가 */
+  content: '';  /* 비어 있는 값을 넣어야 적용됨 */
+  display: block;
+  width: 1px;
+  height: 15px;
+  background: #878787;
+  position: absolute;
+  right: 0;
+  top: 4px;
+}
+/* 푸터 영역 E */
+
+/* 하단 고정 메뉴 S */
+.bottom-quick-menu {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: #fff;
+  border-top: 1px solid #dfe1e5;
+  z-index: 10;
+  padding: 9px 15px;
+
+  display: flex;
+  justify-content: space-around;
+  }
+
+.bottom-quick-menu button {
+  width: 60px;
+  height: 40px;
+  border: none;
+}
+
+.bottom-quick-menu button i {
+  font-size: 40px;
+}
+
+.bottom-quick-menu a {
+  flex-grow: 1; 
+  width: 0;
+  text-align: center;
+}
+
+.bottom-quick-menu .txt {
+  color: #2d2f38;
+  font-size: 9px;
+}
+
+
+.bottom-quick-menu .icon { 
+  height: 30px;   
+}
+
+
+.bottom-quick-menu .icon.pen { 
+  background:url("./images/pen.png") no-repeat center center;
+  background-size: 25px;
+}
+
+.bottom-quick-menu .icon.comment {
+  background:url("./images/comment.png") no-repeat center center;
+  background-size: 35px;
+} 
+
+.bottom-quick-menu .icon.truck {
+  background:url("./images/truck.png") no-repeat center center;
+  background-size: 35px;
+} 
+
+.bottom-quick-menu .icon.person {
+  background:url("./images/person.png") no-repeat center center;
+  background-size: 22px;
+} 
+
+.bottom-quick-links {
+  position: fixed;
+  bottom: 70px;
+  right: 10px;
+  z-index: 10;
+}
+
+.bottom-quick-links img {
+  display: block;
+  width: 50px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+/* 하단 고정 메뉴 E*/

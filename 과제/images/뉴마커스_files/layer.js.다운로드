@@ -1,0 +1,155 @@
+/**
+ * 레이어 팝업
+ * 
+ */
+var codefty = codefty || {};
+codefty.popup = {
+    callback : function() {}, // popup 오픈 후 실행될 콜백 함수 
+    /**
+     * popup 오픈 후 실행될 콜백 함수 설정 
+     * 
+     * @param {Function} callback
+     */
+    setCallback : function(callback) {
+        this.callback = callback;
+        return this;
+    },
+    /**
+     * 레이어 팝업 열기 
+     * 
+     * @param {String} url 팝업 URL
+     * @param {int} width 팝업 너비
+     * @param {int} height 팝업 높이
+	 * @param {boolean} isRounded 모서리 둥글게 처리 여부
+     */
+    open(url,width, height, isRounded) {
+        if (!url)
+            return;
+
+        width = width || window.innerWidth;
+        height = height || window.innerHeight;
+		isRounded = isRounded || false;
+				
+		if (width > window.innerWidth) {
+			width = window.innerWidth;
+		}
+		
+		if (height > window.innerHeight) {
+			height = window.innerHeight;
+		}
+				
+        var left = Math.round((window.innerWidth - width) / 2);
+        var top = Math.round((window.innerHeight - height) / 2);
+	
+        var layerDim = document.getElementById("layerDim");
+		if (layerDim) {
+			if (layerDim.classList.contains('dn')) {
+				layerDim.classList.remove("dn");
+			}
+			layerDim.addEventListener("click", this.close);
+		}
+        var layerPopup = document.createElement("div");
+        layerPopup.id = 'layer_popup';
+		layerPopup.style.position = "fixed";
+		layerPopup.style.zIndex = "1001";
+		layerPopup.style.backgroundColor = "#ffffff";
+        layerPopup.style.width = width + "px";
+        layerPopup.style.height = height + "px";
+        layerPopup.style.top = top + "px";
+        layerPopup.style.left = left + "px";
+		
+		if (isRounded) {
+			layerPopup.style.borderRadius = "10px";
+		}
+		
+        /** 팝업 내용 영역 S */
+        var iframe = document.createElement("iframe");
+        iframe.id = "ifrm_content";
+		iframe.width = width;
+		iframe.height = height;
+		iframe.src= url;
+		iframe.setAttribute("frameborder", 0);
+		iframe.setAttribute("scrolling", "auto");
+		if (isRounded) {
+			iframe.style.borderRadius = "10px";
+		}
+        layerPopup.appendChild(iframe);
+        
+        /** 팝업 내용 영역 E */
+
+        /** 팝업 닫기 버튼 S */
+        var layerClose = document.createElement("i");
+        layerClose.className = "xi-close-thin layer_close";
+        layerPopup.appendChild(layerClose);
+        layerClose.addEventListener("click", codefty.popup.close);
+        /** 팝업 닫기 버튼 E */
+	
+		if (layerDim)
+			document.body.appendChild(layerDim);
+		
+        document.body.appendChild(layerPopup);
+    },
+    /**
+     * 팝업 닫기
+     * 
+     */
+    close() {
+        var layerDim = document.getElementById("layerDim");
+        var layerPopup = document.getElementById("layer_popup");
+        if (layerPopup) {
+            document.body.removeChild(layerPopup);
+        }
+
+        if (layerDim && !layerDim.classList.contains("dn")) {
+			layerDim.classList.add("dn");
+        }
+    }
+};
+
+window.addEventListener("DOMContentLoaded", function() {
+    /** 팝업 열기 처리 S */
+    var layerPopups = document.getElementsByClassName("layer_popup")
+    if (layerPopups.length > 0) {
+        for (var i = 0; i < layerPopups.length; i++) {
+            layerPopups[i].addEventListener("click", function(e) {
+                var dataset = e.currentTarget.dataset;
+                var excepts = ['width', 'height', 'url', 'title'];
+                var url = dataset.url;
+                var width = dataset.width || 300;
+                var height = dataset.height || 300;
+                var qs = [];
+                for (key in dataset) {
+                    if (excepts.indexOf(key) != -1) 
+                        continue;
+                   
+                    qs.push(key + "=" + dataset[key]);
+
+                }
+                if (qs.length > 0) {
+                    if (url.indexOf("?") == -1) url += "?";
+                    else url += "&";
+                    url += qs.join("&");
+                }
+                codefty.popup.open(url, title, Number(width), Number(height));
+            });
+
+        }
+    }
+    /** 팝업 열기 처리 E */
+
+    /** 팝업 닫기 처리 S */
+    var layerCloses = document.getElementsByClassName("layer_close");
+    if (layerCloses.length > 0) {
+        for (var i = 0; i < layerCloses.length; i++) {
+            layerCloses[i].addEventListener("click", codefty.popup.close);
+        }
+    }
+    /** 답업 닫기 처리 E */
+	
+	/** postMessage 메세지 처리 */
+	window.addEventListener("message", function(e) {
+		if (e.data && e.data.mode == 'close_popup') {
+			codefty.popup.close();
+		}
+	});
+});

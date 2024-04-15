@@ -1,0 +1,61 @@
+@charset "utf-8";
+
+.npay_pointcolor{
+    color: #02c73c !important;
+}
+.npay_storebtn_bx,
+.npay_button_box,
+.npay_storebtn_bx *,
+.npay_button_box * {display: block !important;overflow: hidden !important;float: none !important;position: static !important;top: auto !important;left: auto !important;width: auto !important;height: auto !important;margin: 0 !important;padding: 0 !important;border: 0 none !important;font-size: 11px !important;line-height: 13px !important;font-family: '돋움', Dotum, Helvetica, sans-serif !important;text-align: left !important;text-decoration: none !important;vertical-align: top !important;background: none !important;border-radius: 0 !important;font-weight: normal !important;letter-spacing: 0 !important;border-spacing: 0 !important}
+.npay_storebtn_bx {margin: 0 auto !important}
+.npay_button_box {border-top: 2px solid #2b2f3a !important;background-color: #fff !important;height: 100% !important}
+.npay_button_box .npay_blind {overflow: hidden !important;position: absolute !important;width: 1px !important;height: 1px !important;margin: -1px !important;padding: 0 !important;clip: rect(0 0 0 0) !important}
+.npay_button {position: relative !important;margin: 0 !important;padding: 11px 0 11px 103px !important}
+.npay_text {display: block !important;overflow: hidden !important;position: absolute !important;top: 11px !important;left: 0 !important;width: 95px !important}
+.npay_text .npay_naver_logo {display: block !important;background-image: url(../../images/button/mobile/npay_naver_logo.png) !important;background-size: 51px 9px !important;-webkit-background-size: 51px 9px !important;background-position: 50% 0 !important;width: 51px !important;height: 9px !important;margin: 2px 0 5px 1px !important}
+.npay_text .npay_link {display: block !important;text-decoration: none !important;color: #000 !important;letter-spacing: -1px !important;font-weight: normal !important;border-radius: 0 !important}
+.npay_btn_list {display: table !important;width: 100% !important;margin: 0 !important;padding: 0 !important;table-layout: fixed !important;list-style: none !important}
+.npay_btn_item {display: table-cell !important;vertical-align: top !important;width: 100% !important;height: 37px !important;margin: 0 !important;padding: 0 !important;text-align: left !important}
+.npay_btn_item.btn_width {width: 48px !important}
+.npay_btn_link {display: block !important;height: 40px !important;margin: 0 0 0 6px !important;padding: 0 !important;font-size: 14px !important;font-weight: bold !important;line-height: 40px !important;border: 1px solid #ccc !important;background-color: #fff !important;background-repeat: no-repeat !important;text-align: center !important;text-decoration: none !important;border-radius: 2px !important;text-shadow: none !important}
+.npay_btn_link.npay_btn_pay .npay_logo {overflow: visible !important;position: static !important;margin: 0 2px 0 0 !important;display: inline-block !important;vertical-align: top !important;background-image: url(../../images/button/mobile/npay_sp_payment.png) !important;background-size: 46px 80px !important;-webkit-background-size: 46px 80px !important;background-position: 50% 0 !important;width: 46px !important;height: 40px !important;content: '' !important;color: transparent !important;font-size: 0 !important;line-height: 0 !important}
+.npay_btn_link.npay_btn_pay {color: #000 !important}
+.npay_btn_link.npay_btn_zzim {font-weight: 500 !important;color: #404048 !important}
+.npay_btn_item:first-child .npay_btn_link {margin: 0 !important}
+.npay_btn_link.btn_green {border-color: #00c851 !important;background-color: #00de5a !important}
+.npay_btn_link.npay_btn_talk,
+.npay_btn_link.npay_btn_zzim {width: 40px !important}
+.npay_btn_link.npay_btn_talk {background-image: url(../../images/button/mobile/npay_sp_talk.png) !important;background-size: 40px 80px !important;-webkit-background-size: 40px 80px !important;background-position: 50% 0 !important}
+.npay_btn_link.btn_gray {border-color: #9ba0ac !important;background-color: #acb2bf !important;color: #797d85 !important}
+.npay_btn_link.npay_btn_pay.btn_gray .npay_logo {background-position: 0 -40px !important}
+.npay_btn_link.npay_btn_talk.btn_gray {background-position: 50% -40px !important}
+.npay_event {position: relative !important;margin: 0 !important;padding: 0 40px 0 0 !important;border: 0 none !important;border-top: 1px solid #eaecee !important}
+.npay_event_text {display: block !important;overflow: hidden !important;margin: 0 !important;padding: 4px 0 8px !important;white-space: nowrap !important;text-overflow: ellipsis !important;word-wrap: normal !important;font-size: 10px !important}
+.npay_event_text .event_title {display: inline-block !important;margin: 0 5px 0 0 !important;margin: 0 !important;padding: 0 !important;font-weight: normal !important;color: #00bd39 !important;font-size: 10px !important}
+.npay_event_text .event_title.icon_point{
+    display: inline-block !important;
+    width:39px !important;
+    height: 14px !important;
+    margin-right: 4px !important;
+    background: url("../../images/button/mobile/npay_sp_icon.png") no-repeat !important;
+    background-size: 39px 13px !important;
+}
+.npay_event_text .event_link span{
+    display: inline-block !important;
+    font-size: 10px !important;
+}
+.npay_event_text .event_link {display: inline-block !important;margin: 0 !important;color: #727272 !important;text-decoration: none !important;font-size: 10px !important}
+.npay_more {position: absolute !important;top: 50% !important;right: 0 !important;width: 20px !important;height: 20px !important;margin-top: -10px !important;padding: 0 !important;background: url(../../images/button/mobile/npay_sp_more.png) no-repeat 100% 5px !important;background-size: 6px 10px !important;-webkit-background-size: 6px 10px !important;text-decoration: none !important}
+.npay_bg_dgray {padding: 0 15px !important;width: auto !important;border-top: none !important;background-color: #15171e !important}
+.npay_bg_dgray .npay_button {border-top: 2px solid #383a40 !important}
+.npay_bg_dgray .npay_text .npay_link {color: #FFF !important}
+.npay_bg_dgray .npay_event_text,
+.npay_bg_dgray .event_link {color: #959595 !important}
+
+.npay_bg_dgray .npay_btn_link.npay_btn_talk.btn_gray {background-position: 50% -160px !important}
+
+.npay_bg_dgray .npay_event {border-top-color: #2b2d33 !important}
+.npay_bg_dgray .npay_more_prev {background-position: 0 -20px !important}
+.npay_bg_dgray .npay_more_next {background-position: -15px -20px !important}
+.npay_type_MA_1 {width: 290px !important;height: 85px !important}
+.npay_type_MB_1 {width: 320px !important;height: 100px !important}

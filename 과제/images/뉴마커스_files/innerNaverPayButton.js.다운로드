@@ -1,0 +1,494 @@
+//////////////////////////////////////////////////////////////////////////////// 
+// 
+// NHN Business Platform CORPORATION
+// Copyright 2009-2011 NHN Business Platform CORPORATION 
+// All Rights Reserved. 
+// 
+// 이 문서는 NHN Business Platform Corp.㈜의 지적 자산이므로 NHN Business Platform Corp.(주)의 승인 없이 이 문서를 다른 용도로 임의 
+// 변경하여 사용할 수 없습니다. 
+// 
+// 파일명 : innerNaverPayButton.js 
+// 작성일 : 2012.10.10 
+// 
+// 최종 수정일: 2013.02.25
+// 
+// Version : 1.1
+// 
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @author Gookeun Lim / passion.lim@nhn.com 
+ * modify taeheung.ha@nhn.com 
+ * modify hyundo.ryu@nhn.com 
+ */
+
+if (typeof naver == 'undefined') naver = {};
+
+naver.NaverPayButton = (function(){
+	
+	var NAVER_PAY_BUTTON_STYLE_ID="NAVER_PAY_STYLE";
+	var NAVER_PAY_HOST_PATTERN = /^https?:\/\/[^\/]*pay\.naver\.com/;
+	var NAVER_PAY_BUTTON_SRC_PATTERN = /^(https?:\/\/[^\/]*pay\.naver\.com)\/[^?]*\/mobile\/innerNaverPayButton.js/;
+	var NAVER_PAY_URL = "pay.naver.com";
+	var LAYOUT_URL = "img.pay.naver.net";
+	var FORCE_DISABLE_MESSAGE_KEY = "FORCE_DISABLE";
+	
+	var BUTTON_TYPE_PARAM = {
+			"MA_1_1" : {"BUTTON_CLASS" : "npay_type_MA_1",   "NPAY_BUTTON_BOX_CLASS" : ""},
+			"MA_1_2" : {"BUTTON_CLASS" : "npay_type_MA_1",   "NPAY_BUTTON_BOX_CLASS" : ""},
+			"MB_1_1" : {"BUTTON_CLASS" : "npay_type_MB_1",   "NPAY_BUTTON_BOX_CLASS" : "npay_bg_dgray"},
+			"MB_1_2" : {"BUTTON_CLASS" : "npay_type_MB_1",   "NPAY_BUTTON_BOX_CLASS" : "npay_bg_dgray"},
+			"" : ""
+		};
+	
+	function _prepareDIV(optionParams) {
+		BUTTON_DIV = ''
+			+'<div id="${BUTTON_ID}" class="npay_storebtn_bx ${BUTTON_CLASS}">'
+			+ _prepareInnerDIV(optionParams)
+			+'</div>';
+		return BUTTON_DIV;
+	}
+	
+	function _prepareInnerDIV(optionParams) {
+		BUTTON_INNER_DIV = ''
+			+'    <div class="npay_button_box ${NPAY_BUTTON_BOX_CLASS}">'
+			+'        <div class="npay_button">'
+			+'            <div class="npay_text"><span class="npay_naver_logo"><span class="npay_blind">NAVER</span></span><a href="https://m.pay.naver.com/mobile/about" class="npay_link">네이버 ID로 간편구매<br>네이버페이</a></div>'
+			+'            	${NPAY_BUTTON}'
+			+'        </div>'
+			+'        <div class="npay_event">'
+			+'            <p id="NPAY_PROMOTION_ID'+optionParams['BUTTON_ID']+'" class="npay_event_text"><strong class="event_title">2천포인트</strong> <a href="https://new-m.pay.naver.com/pcpay/eventbenefit" class="event_link">간편결제 첫사용시지급</a></p>'
+			+'            <a id="NPAY_PROMOTION_NEXT_ID'+optionParams['BUTTON_ID']+'" href="https://new-m.pay.naver.com/historybenefit/eventbenefit" class="npay_more"><span class="npay_blind">다음</span></a>'
+			+'        </div>'
+			+'    </div>'
+		return BUTTON_INNER_DIV;
+	}
+	
+	
+	function _prepareButtonHTML(optionParams) {
+		ENABLE = optionParams['ENABLE'];
+		var showTalkButton = optionParams['talk'] == 'Y' && ENABLE == 'Y';
+		
+		buttonHTML = '';
+			buttonHTML = buttonHTML		
+			+'<ul class="npay_btn_list">'
+		    +'    <li class="npay_btn_item">'
+		    +'        <a ID="NPAY_BUY_LINK_ID'+optionParams['BUTTON_ID']+'" href="${NPAY_BUY_LINK_URL}" class="npay_btn_link npay_btn_pay ${NPAY_BUY_LINK_CLASS}"><span class="npay_logo npay_blind">네이버페이</span>구매</a>'
+		    +'    </li>';
+		if(optionParams["COUNT"] == 2){
+			buttonHTML = buttonHTML
+		    +'    <li class="npay_btn_item btn_width">'
+		    +'        <a ID="NPAY_WISH_LINK_ID'+optionParams['BUTTON_ID']+'" href="${NPAY_WISH_LINK_URL}" class="npay_btn_link npay_btn_zzim ${NPAY_WISH_LINK_CLASS}">찜</a>'
+		    +'    </li>';
+		}
+		if(showTalkButton) {
+			buttonHTML = buttonHTML
+		    +'    <li class="npay_btn_item btn_width">'
+		    +'        <a ID="NPAY_TALK_LINK_ID'+optionParams['BUTTON_ID']+'" href="#" class="npay_btn_link npay_btn_talk ${NPAY_TALK_LINK_CLASS}"><span class="npay_blind">톡톡</span></a>'
+		    +'    </li>';
+		}
+			buttonHTML = buttonHTML
+		    +'</ul>';		
+		return buttonHTML;
+	}
+	
+	function _getTalkDomain(){
+		if(GLOBALS.HOST.indexOf('dev-')>=0 || GLOBALS.HOST.indexOf('alpha-')>=0) {
+			return 'https://dev-talk.naver.com/';
+		} else if(GLOBALS.HOST.indexOf('beta-')>=0) {
+			return 'https://beta-talk.naver.com/';
+		} else {
+			return 'https://talk.naver.com/';
+		} 
+	} 
+	
+	var Buttons = {};
+	var NaverPayButton = {};
+
+	NaverPayButton.putAllTo = function(dest, src) {
+		for (var key in src ) {
+			dest[key] = src[key];
+		}
+		return dest;
+	};
+	
+	NaverPayButton.replace = function(buttonHTML, orgText, repText) {
+		var buttonHTML = buttonHTML.replace(orgText, repText);
+		return buttonHTML;
+	};
+	
+	NaverPayButton.prepareInitialParam = function(optionParams) {
+		NaverPayButton.putAllTo(optionParams, GLOBALS);
+		
+		optionParams["BUTTON_ID"] = "NC_ID_"+new Date().getTime() + parseInt(Math.random() * 1000);
+		optionParams["COUNT"] = optionParams["COUNT"] == 3 ? 2 : optionParams["COUNT"];
+		optionParams["COLOR"] = 1;
+		optionParams["BUTTON_TYPE"] = optionParams["TYPE"]+"_"+optionParams["COLOR"]+"_"+optionParams["COUNT"];
+		
+		buttonTypeParam = BUTTON_TYPE_PARAM[optionParams["BUTTON_TYPE"]];
+		if(buttonTypeParam == null || typeof(buttonTypeParam)=='undefined') {
+			optionParams["TYPE"] = 'MA';
+			optionParams["COLOR"] = 1;
+			optionParams["COUNT"] = 1;
+			optionParams["ENABLE"] = 'Y';
+			optionParams["BUTTON_TYPE"] = optionParams["TYPE"]+"_"+optionParams["COLOR"]+"_"+optionParams["COUNT"];
+		}
+		
+		if(optionParams["BUY_BUTTON_LINK_URL"] == '' || optionParams["BUY_BUTTON_LINK_URL"] == null) {
+			optionParams["BUY_BUTTON_LINK_URL"] = '#';
+		}
+		
+		if(optionParams["WISHLIST_BUTTON_LINK_URL"] == '' || optionParams["WISHLIST_BUTTON_LINK_URL"] == null) {
+			optionParams["WISHLIST_BUTTON_LINK_URL"] = '#';
+		}
+		
+	};
+	
+	NaverPayButton.prepareLayoutHTML = function(optionParams) {
+		buttonType = optionParams["BUTTON_TYPE"];
+		
+		buttonParam = BUTTON_TYPE_PARAM[buttonType];
+		layoutHTML = _prepareDIV(optionParams);	
+		layoutHTML = NaverPayButton.replace(layoutHTML, '${BUTTON_ID}', optionParams["BUTTON_ID"]);
+		layoutHTML = NaverPayButton.replace(layoutHTML, '${BUTTON_CLASS}',	buttonParam.BUTTON_CLASS);
+		layoutHTML = NaverPayButton.replace(layoutHTML, '${NPAY_BUTTON_BOX_CLASS}', buttonParam.NPAY_BUTTON_BOX_CLASS);
+		optionParams["layoutHTML"] = layoutHTML;
+	};
+	
+	NaverPayButton.prepareButtonHTML = function(optionParams) {
+		buttonHTML = _prepareButtonHTML(optionParams);
+		
+		buttonType = optionParams["BUTTON_TYPE"];
+		buttonParam = BUTTON_TYPE_PARAM[buttonType];
+		
+		buttonParam['NPAY_BUY_LINK_CLASS'] = 'btn_green';
+		
+		if(optionParams["ENABLE"] == 'Y') {
+			buttonParam.NPAY_WISH_LINK_CLASS = '';
+			buttonParam.NPAY_TALK_LINK_CLASS = '';
+		} else {
+			buttonParam.NPAY_BUY_LINK_CLASS = 'btn_gray';
+			buttonParam.NPAY_WISH_LINK_CLASS = 'btn_gray';
+			buttonParam.NPAY_TALK_LINK_CLASS = 'btn_gray';
+		}
+		// add css class into template
+		buttonHTML = NaverPayButton.replace(buttonHTML, '${NPAY_BUY_LINK_CLASS}', buttonParam.NPAY_BUY_LINK_CLASS);
+		buttonHTML = NaverPayButton.replace(buttonHTML, '${NPAY_WISH_LINK_CLASS}', buttonParam.NPAY_WISH_LINK_CLASS);
+		buttonHTML = NaverPayButton.replace(buttonHTML, '${NPAY_TALK_LINK_CLASS}', buttonParam.NPAY_TALK_LINK_CLASS);
+		
+		buttonHTML = NaverPayButton.replace(buttonHTML, '${NPAY_BUY_LINK_URL}', optionParams["BUY_BUTTON_LINK_URL"]);
+		buttonHTML = NaverPayButton.replace(buttonHTML, '${NPAY_WISH_LINK_URL}', optionParams["WISHLIST_BUTTON_LINK_URL"]);
+		
+		optionParams['buttonHTML'] = buttonHTML;
+	};
+	
+	NaverPayButton.apply = function(optionParams) {
+		NaverPayButton.prepareInitialParam(optionParams);
+		NaverPayButton.prepareLayoutHTML(optionParams);
+		NaverPayButton.prepareButtonHTML(optionParams);
+		
+		var htmlTemplate = optionParams['layoutHTML'];
+		htmlTemplate = htmlTemplate.replace('${NPAY_BUTTON}', optionParams['buttonHTML']);
+		
+		if ( optionParams["EMBED_ID"] != null ) {
+			var embededElement = document.getElementById(optionParams["EMBED_ID"]);
+			if ( embededElement == null) {
+				alert("버튼을 넣을 수 있는 Element 를 찾을 수 없습니다. EMBED_ID="+optionParams["EMBED_ID"]);
+				return false;
+			}
+			embededElement.innerHTML = htmlTemplate;
+		} else {
+			document.write(htmlTemplate);
+		}
+		
+		if (optionParams["BUTTON_KEY"] == "common") {
+			return optionParams["BUTTON_ID"];
+		}
+		
+		NaverPayButton.applyAllButtonHandler(optionParams);
+		
+		var buttonType = optionParams["BUTTON_TYPE"];
+		var jsonRequestUrl = GLOBALS.HOST + "/button/info";
+		jsonRequestUrl += "?callback=naver.NaverPayButton.jsonp.callback";
+		jsonRequestUrl += "&buttonKey=" + optionParams["BUTTON_KEY"];
+		jsonRequestUrl += "&buttonTypeCode=" + optionParams["BUTTON_TYPE"]+'_'+optionParams["ENABLE"];
+		jsonRequestUrl += "&site_preference=normal";
+		
+		NaverPayButton.jsonp(jsonRequestUrl);
+		Buttons[optionParams["BUTTON_ID"]] = {"ID" : optionParams["BUTTON_ID"], "KEY" : optionParams["BUTTON_KEY"], "TYPE" : optionParams["BUTTON_TYPE"], "SET" : false, "PARAM" : optionParams, "":""};
+		
+		return optionParams["BUTTON_ID"];
+	};
+	
+	NaverPayButton.applyAllButtonHandler = function(optionParams, forceDisableMessage) {
+		if (!forceDisableMessage) {
+			if(document.getElementById("NPAY_BUY_LINK_ID"+optionParams['BUTTON_ID'])) {
+				NaverPayButton.applyButtonHandler(document.getElementById("NPAY_BUY_LINK_ID"+optionParams['BUTTON_ID']), optionParams["BUY_BUTTON_HANDLER"], optionParams["BUY_BUTTON_HANDLER_ARGS"]);
+			}
+			if(document.getElementById("NPAY_WISH_LINK_ID"+optionParams['BUTTON_ID'])) {
+				NaverPayButton.applyButtonHandler(document.getElementById("NPAY_WISH_LINK_ID"+optionParams['BUTTON_ID']), optionParams["WISHLIST_BUTTON_HANDLER"], optionParams["WISHLIST_BUTTON_HANDLER_ARGS"]);
+			}
+			if(document.getElementById("NPAY_TALK_LINK_ID"+optionParams['BUTTON_ID'])) {
+				document.getElementById("NPAY_TALK_LINK_ID"+optionParams['BUTTON_ID']).href=_getTalkDomain()+optionParams['talkAccountId']+'?frm=mpay&ref='+encodeURIComponent(location.href)+'#nafullscreen';
+			}
+		} else {
+			if(document.getElementById("NPAY_BUY_LINK_ID"+optionParams['BUTTON_ID'])) {
+				NaverPayButton.applyButtonHandler(document.getElementById("NPAY_BUY_LINK_ID"+optionParams['BUTTON_ID']), function(){alert(forceDisableMessage); return false;});
+			}
+			if(document.getElementById("NPAY_WISH_LINK_ID"+optionParams['BUTTON_ID'])) {
+				NaverPayButton.applyButtonHandler(document.getElementById("NPAY_WISH_LINK_ID"+optionParams['BUTTON_ID']), function(){alert(forceDisableMessage); return false;});
+			}
+			if(document.getElementById("NPAY_TALK_LINK_ID"+optionParams['BUTTON_ID'])) {
+				NaverPayButton.applyButtonHandler(document.getElementById("NPAY_TALK_LINK_ID"+optionParams['BUTTON_ID']), function(){alert(forceDisableMessage); return false;});
+			}
+		}
+	};
+	
+	NaverPayButton.applyButtonHandler = function(element, handler, argsParams) {
+		var args = argsParams!=null?argsParams:new Array();
+		var shifted = false;
+		if ( handler != null && element != null ) {
+			element.onclick = function(){
+				if ( !shifted ) {
+					args.unshift(this.href);
+					shifted = true;
+				}
+				var result = handler.apply(this, args); 
+				return result!=null?result:false; 
+			};
+		}
+	};	
+	
+	NaverPayButton.jsonp = function(url) {
+		var head = document.getElementsByTagName("head").item(0);
+		  if(head == null || typeof(head) == "undefined") {
+			  head = document.body;
+		   }
+	      var script = document.createElement("script");
+	      script.setAttribute("type", "text/javascript");
+	      script.setAttribute("charset", "utf-8");
+	      script.setAttribute("src", url);
+	      head.appendChild(script);
+	};
+	
+	NaverPayButton.jsonp.callback = function(json) {
+		if (typeof json != "object" || !("KEY" in json) || !("TYPE" in json) || !("STATE" in json)) {
+			return;
+		}
+		
+		var applyButtons =  new Array();
+		var applyButtonsIndex = 0;
+		
+		for (var id in Buttons ) {
+			if (((Buttons[id].KEY == json.KEY) || FORCE_DISABLE_MESSAGE_KEY in json) && Buttons[id].SET == false) {
+				Buttons[id].SET = true;
+				applyButtons[applyButtonsIndex] = Buttons[id].ID;
+				applyButtonsIndex++;
+			} 
+		}
+
+		for(var i = 0 ; i < applyButtons.length; i++) {
+			var id = applyButtons[i];
+			var buttonDiv = document.getElementById(id);
+			if (!buttonDiv) {
+				continue;
+			}
+			var changed = false;
+			if (!json.STATE) {
+				Buttons[id].PARAM["ENABLE"] = "N";
+				changed = true;
+				// 모바일 상태가 정상이 아니면 버튼 숨김 처리 2013.7.6
+				if(buttonDiv.parentNode) {
+					buttonDiv.parentNode.removeChild(buttonDiv);
+				} else {
+					buttonDiv.innerHTML = "";
+				}
+				continue;
+			}
+			
+			if (Buttons[id].PARAM["COUNT"] == 3 && !json.CART) {
+				Buttons[id].PARAM["COUNT"] = 2;
+				changed = true;
+			}
+			
+			if (FORCE_DISABLE_MESSAGE_KEY in json) {
+				Buttons[id].PARAM["ENABLE"] = "N";
+				changed = true;
+			}
+			
+			if(json.talk == 'Y') {
+				changed = true;
+				Buttons[id].PARAM["talk"] = 'Y';
+				Buttons[id].PARAM["talkAccountId"] = json.talkAccountId;
+			}
+
+			if (changed) {
+				optionParams = Buttons[id].PARAM;
+				NaverPayButton.prepareButtonHTML(optionParams);
+				
+				var htmlTemplate = _prepareInnerDIV(optionParams);
+				htmlTemplate = htmlTemplate.replace('${NPAY_BUTTON_BOX_CLASS}', buttonParam.NPAY_BUTTON_BOX_CLASS);
+				htmlTemplate = htmlTemplate.replace('${NPAY_BUTTON}', optionParams['buttonHTML']);
+				buttonDiv.innerHTML = htmlTemplate;
+				
+				NaverPayButton.applyAllButtonHandler(optionParams, json[FORCE_DISABLE_MESSAGE_KEY]);
+				
+			}
+			if ("PRMT" in json) {
+				NaverPayButton.applyPromotion(Buttons[id].ID, json.PRMT);
+			}
+		}
+	};
+	
+	var PromotionCheck = {};
+	NaverPayButton.applyPromotion = function(buttonIdParam, promotionsParam) {
+		if (PromotionCheck.buttonId || typeof promotionsParam != "object") {
+			return;
+		}
+		PromotionCheck[buttonId] = true;
+		if (promotionsParam.length == 0) {
+			return;
+		}
+		var buttonId = buttonIdParam;
+		var promotions = promotionsParam;
+		var index = 0;
+		var oPromotionArea = document.getElementById("NPAY_PROMOTION_ID"+buttonIdParam);
+
+		if (!oPromotionArea) {
+			return;
+		}
+
+		if (promotions.length > 0) {
+			var totalSize = promotions.length
+
+			for (var i = 0; i < totalSize; i++) {
+				var promotion = promotions[i];
+
+				if (promotion === undefined) {
+					continue
+				}
+
+				if (promotion.sloganContentAccumulate === undefined) {
+					if (promotion.sloganContent.toString().indexOf("{ACM_RATE}") !== -1) {
+						delete promotions[i]
+					}
+				}
+			}
+		}
+
+		function changePromotion(index) {
+			if (index >= promotions.length) {
+				return;
+			}
+
+			var promotion = promotions[index];
+			if (promotion === undefined) {
+				return
+			}
+
+			var __title = promotion.title
+			var __link = promotion.link
+			var __slogan = ""
+
+			if (promotion.sloganContentAccumulate !== undefined) {
+				__slogan = promotion.sloganContentAccumulate
+			} else {
+				__slogan = promotion.sloganContent
+			}
+
+			if("pointplus" in promotion) {
+				oPromotionArea.innerHTML = '<strong class="event_title icon_point">' + __title + '</strong><a href="' + __link + '" class="event_link">' + __slogan + '</a>'
+			} else {
+				var title = "";
+				if (__title != null && __title != '') {
+					title = '[' + __title + ']';
+				}
+
+				var linkHtmlTag = "";
+
+				if (promotion.link === "{NONE}") {
+					linkHtmlTag = '</strong><a href="javascript:void(0)" class="event_link">';
+				} else {
+					linkHtmlTag = '</strong><a href="' + __link + '" class="event_link">';
+				}
+
+				oPromotionArea.innerHTML = '<strong class="event_title">' + title + linkHtmlTag + __slogan + '</a>';
+			}
+		}
+
+		function rolling() {
+			index++;
+			if (index >= promotions.length) {
+				index = 0;
+			}
+			changePromotion(index);
+		}
+		
+		function onLoad() {
+			if (promotions.length > 1) {
+				//rolling();			
+				setInterval(rolling, 5000);
+			}
+		}
+		
+		changePromotion(index);
+		onLoad();
+	};
+	
+	
+	//--- GLOBALS 변수 세팅 및 CSS 적용--------------------------------------------------------//
+	// GLOBALS 변수 선언 되어 있으면 실행 안함
+	if (typeof GLOBALS != 'undefined' ) {
+		return;
+	}
+	
+	function _findNaverPayHost() {
+		var scriptObjects = document.getElementsByTagName("script");
+		if ( scriptObjects == null ) {
+			return null;
+		}
+		for ( var i in scriptObjects ) {
+			try {
+				var result = NAVER_PAY_BUTTON_SRC_PATTERN.exec(scriptObjects[i].src);
+				if ( result != null) {
+					return result[1];
+				}
+			} catch (e) {}
+		}
+		return null;
+	}
+	
+	var GLOBALS = {
+			HOST:_findNaverPayHost(this)
+	};
+	
+	function _getLayoutHost(host) {
+		if (host) {
+			return host.replace(NAVER_PAY_URL, LAYOUT_URL);
+		}
+	}
+	
+	function _validateGlobalVariable(obj) {
+		if ( GLOBALS.HOST == null ) {
+			alert("HOST 명을 찾을 수 없어 네이버 페이 버튼을 초기화 할 수 없습니다.");
+			return false;
+		} else if ( !NAVER_PAY_HOST_PATTERN.test(GLOBALS.HOST) ) {
+			alert("HOST 명이 유효하지 않습니다.");
+			return false;
+		}
+		return true;
+	}
+	
+	if (!_validateGlobalVariable()) {
+		return;
+	}
+	
+	// CSS 적용
+	function _embedStyleSheet() {
+		document.write("<link id='"+NAVER_PAY_BUTTON_STYLE_ID+"' type='text/css' rel='stylesheet' href='" + _getLayoutHost(GLOBALS.HOST) + "/static/css/button/mbutton2.css?" + Math.round(+new Date()/3600000) + "' />");
+	}
+	
+	_embedStyleSheet();
+	
+	return NaverPayButton;
+})();
