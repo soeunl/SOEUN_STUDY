@@ -12,7 +12,7 @@
             (Collection  - 데이터군, 자료)
 
         (참고)
-            배열
+            배열★★★
                 - 같은 자료형
                 - 순차적인 나열 구조
 
@@ -20,17 +20,17 @@
 
 ---
 
-# 배열 리터럴로 생성하기  
+# 배열 리터럴로 생성하기
 
     - 배열 리터럴은 쉼표로 구분한 값을 대괄호([])로 묶어서 표현
     - const 배열명 = [...];  //new Array(...)
     - [...] 부분이 배열 리터럴이며 배열 값 하나를 배열 요소라고 부름
-    - 요소에 매긴 번호는 요소 번호 또는 인덱스라고 부름 
+    - 요소에 매긴 번호는 요소 번호 또는 인덱스라고 부름
     - 배열 리터럴 안에 어떠한 요소도 작성하지 않으면 빈 배열이 생성됨
     - 배열 리터럴 요소의 값을 생략하면 그 요소는 생성되지 않음
     - 변수의 요소에는 변수와 마찬가지로 모든 타입의 값이 올 수 있음
 
----    
+---
 
 # length 프로퍼티
 
@@ -48,13 +48,13 @@
         a.length = 2;
         console.log(a); // -> ["A", "B"]
 
----        
+---
 
 # Array 생성자로 생성하기
 
 - 배열은 Array 생성자로 생성할 수 있음
-    const 배열명 = new Array(3); 
--  Array 생성자의 인수는 양의 정수 숫자만 가능 
+  const 배열명 = new Array(3);
+- Array 생성자의 인수는 양의 정수 숫자만 가능
 - 매개변수가 여러개 일때는 갯수만큼 공간이 생성, 값이 순서대로 추가
 
 ---
@@ -81,10 +81,7 @@
 - 배열 요소가 있는지 확인하는 방법은 객체의 프로퍼티가 있는지 확인하는 방법과 같음
 - for/in 문이나 hasOwnProperty 메서드를 사용해서 확인할 수 있음
 
-<Array.prototype.find()>
-        - 배열에서 찾은 요소의 인덱스가 필요한 경우, findIndex()를 사용
-        - 값의 인덱스를 찾아야 하는 경우, indexOf()를 사용
-        - 배열에 값이 존재하는지 찾아야 하는 경우, includes()를 사용
+<Array.prototype.find()> - 배열에서 찾은 요소의 인덱스가 필요한 경우, findIndex()를 사용 - 값의 인덱스를 찾아야 하는 경우, indexOf()를 사용 - 배열에 값이 존재하는지 찾아야 하는 경우, includes()를 사용
 
         Array.prototype.find : 첫번째 발견 요소
         Array.prototype.findIndex : 첫번째 요소의 index 순서 (0부터 시작하는), 왼쪽 -> 오른쪽
@@ -98,79 +95,61 @@
 # 배열의 메서드
 
 - 배열은 Array 타입 객체이며 Array.prototype 프로퍼티를 상속받음
--  Array.prototype에는 수많은 메서드가 정의되어 있으며, 모든 배열은 이 메서드를 사용할 수 있음
+- Array.prototype에는 수많은 메서드가 정의되어 있으며, 모든 배열은 이 메서드를 사용할 수 있음
 - 수정 메서드는 원본 배열을 바로 수정함
 - 접근자 메서드는 배열을 다른 형태로 가공한 새로운 배열을 반환하며 원본 배열은 수정하지 않음
 - 반복 메서드는 원본 배열의 모든 요소를 순회하며 특정한 작업을 수행함
 
-    (1) Array.prototype의 메서드 목록
-        - contact(..items) : 두개 이상의 배열을 병합, 새로운 배열로 반환
+  (1) Array.prototype의 메서드 목록 - contact(..items) : 두개 이상의 배열을 병합, 새로운 배열로 반환
 
         판별
         filter(callbackFn) : callbackFn이 참으로 반한되는 요소만 걸러주기
         every(callbackFn) : 모든 요소가 참 -> 참 (하나라도 거짓이면 통과되지 않음)
         some(callbackFn) : 어떤 것이든 참이면 -> 참 (하나라도 참이면 참)
 
-    (2) Array.prototype.forEach()
-        - (반복) foreach(callbackFn) : 단순 반복
+  (2) Array.prototype.forEach() - (반복) foreach(callbackFn) : 단순 반복
 
-    (3) Array.prototype.map()
-        - (변경) map(callbackFn) : 반환값으로 새로운 배열 생성
-        - flatMap(callbackFn) : 중첩된 배열 객체 -> 1차원적인 배열 객체 전환
+  (3) Array.prototype.map() - (변경) map(callbackFn) : 반환값으로 새로운 배열 생성 - flatMap(callbackFn) : 중첩된 배열 객체 -> 1차원적인 배열 객체 전환
 
-    (4) Array.prototype.join()
-        - 배열의 모든 요소를 쉼표나 지정된 구분 문자열로 구분하여 연결한 새 문자열을 만들어 반환
-        - 배열 -> 문자열
-        - join("결합문자열 - 기본값,";)
+  (4) Array.prototype.join() - 배열의 모든 요소를 쉼표나 지정된 구분 문자열로 구분하여 연결한 새 문자열을 만들어 반환 - 배열 -> 문자열 - join("결합문자열 - 기본값,";)
 
             (참고) String.prototype.split("구문 문자열")
-            객체를 지정한 구분자를 이용하여 여러 개의 문자열로 나눔. 문자열을 구문 문자열로 쪼개서 
+            객체를 지정한 구분자를 이용하여 여러 개의 문자열로 나눔. 문자열을 구문 문자열로 쪼개서
 
-    (5) Array.prototype.reverse()
-        - 배열의 순서를 반전
-        - 첫 번째 요소는 마지막 요소가 되며 마지막 요소는 첫 번째 요소가 됨
+  (5) Array.prototype.reverse() - 배열의 순서를 반전 - 첫 번째 요소는 마지막 요소가 되며 마지막 요소는 첫 번째 요소가 됨
 
-    (6) Array.prototype.slice()
-        - 깊은복사를 할 때 주로 사용
-        - 어떤 배열의 begin 부터 end 까지(end 미포함)에 대한 얕은 복사본을 새로운 배열 객체로 반환
-        - 원본 배열은 바뀌지 않음
+  (6) Array.prototype.slice() - 깊은복사를 할 때 주로 사용 - 어떤 배열의 begin 부터 end 까지(end 미포함)에 대한 얕은 복사본을 새로운 배열 객체로 반환 - 원본 배열은 바뀌지 않음
 
-    (7) Array.prototype.sort()
-        - 배열 요소들을 규칙대로 정렬
-        - 비교 함수의 반환값에 따라 배열을 정렬
-        - 비교 값이 양수이면 뒤로 (오름차순)
-        - 비교 값이 음수이면 앞으로 (내림차순)
+  (7) Array.prototype.sort() - 배열 요소들을 규칙대로 정렬 - 비교 함수의 반환값에 따라 배열을 정렬 - 비교 값이 양수이면 뒤로 (오름차순) - 비교 값이 음수이면 앞으로 (내림차순)
 
-    (8) Array.prototype.reduce()
-        - 반환값이 계속 첫번째 매개변수가 됨
-        - 반환값은 다음번 누적 값이 됨
+  (8) Array.prototype.reduce() - 반환값이 계속 첫번째 매개변수가 됨 - 반환값은 다음번 누적 값이 됨
 
-    (9) Array.isArray()
-        - 전달된 값이 Array인지 판단
-        - instanceof와 같은 기능
+  (9) Array.isArray() - 전달된 값이 Array인지 판단 - instanceof와 같은 기능
 
         (참고)
             AirBnB - 자바스크립트 코딩 가이드
                 깊은 복사
                     slice
-        
-    (10) Symbol.iterator가 정의된 경우
-             반복자 패턴 구현
-                -> 디자인 패턴
-             커서 : 이동 위치
-                -> 커서를 이동하면서 다음 요소 접근
-                -> next(): 커서 이동 -> 다음 요소 접근
+
+
+  (10) Symbol.iterator가 정의된 경우
+  반복자 패턴 구현
+  -> 디자인 패턴
+  커서 : 이동 위치
+  -> 커서를 이동하면서 다음 요소 접근
+  -> next(): 커서 이동 -> 다음 요소 접근
 
         for .. of 구문 <- Symbol.iterator가 구현된 객체이면 사용 가능★★★
 
 ---
 
 # 다차원 배열
+
     - 배열 객체 안에 배열 객체를 정의하는 경우
     - [...] : 1차원 배열
     - [[...], [...]] : 2차원 배열
 
----    
+---
 
 # 유사배열
 
@@ -179,6 +158,7 @@
 - 프로퍼티 이름이 0이상의 정수이며 length 프로퍼티가 있는 객체
 
 (ex)
+
 - 함수의 인수를 저장한 Arguments 객체
 - DOM의 document.getElementsByTagName 메서드, document.getElementsByName 메서드 등이 반환하는 NodeList 객체
 
@@ -206,6 +186,4 @@
 ---
 
 (참고)
-    Array.prototype.concat()
-        - concat() 메서드는 두 개 이상의 배열을 병합하는 데 사용. 이 메서드는 기존 배열을 변경하지 않고, 새 배열을 반환함
-        - 기존 데이터는 그대로 남아있음
+Array.prototype.concat() - concat() 메서드는 두 개 이상의 배열을 병합하는 데 사용. 이 메서드는 기존 배열을 변경하지 않고, 새 배열을 반환함 - 기존 데이터는 그대로 남아있음
