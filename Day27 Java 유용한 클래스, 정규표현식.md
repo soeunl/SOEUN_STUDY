@@ -1,4 +1,4 @@
-<Day26 - 0424>
+<Day27 - 0425>
 <JAVA 유용한 클래스, 정규표현식>
 
 # 유용한 클래스
@@ -164,6 +164,21 @@ exec(문자열) : 패턴에 일치하는 문자열을 추출 - 커서 이동하�
     boolean endsWith(...) : 특정 문자열로 끝나는지 체크
     boolean starts(..) : 특정 문자열로 시작하는지 체크
 
+    static join
+    static format(..)
+    substring
+
+    empty : 여백 미포함 체크
+    Blank : 여백 포함 체크 (11버전 이후)
+
+
+    indexOf : 왼쪽에서 오른쪽으로 검색
+    lastlndexOf : 오른쪽에서 왼쪽으로 검색
+    matches
+
+    stripLeading
+    stripTrailing
+
     (참고)
 
     equalsIgnoreCase : 대소문자 구분 없이 비교
@@ -174,3 +189,10 @@ exec(문자열) : 패턴에 일치하는 문자열을 추출 - 커서 이동하�
     join : 문자 결합
     length : 문자열 길이
     matches : 맞는지 틀린지 체크
+    split : 쪼개진 문자를 정해진 만큼만 가져올때
+    strip : 여백제거
+    trim : 여백제거
+    stripLeading : 앞쪽 여백 제거
+    stripTrailing : 뒤쪽 여백 제거
+    substring : 특정위치부터 문자를 잘라줌 (beginIndex이상 endIndex 미만)
+    valueOf : 문자열 객체
