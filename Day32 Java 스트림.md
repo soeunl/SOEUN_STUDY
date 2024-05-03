@@ -16,6 +16,13 @@
 - 출처가 달라도 스트림 방식으로 처리하면 동일하게 처리할 수 있음🤍🤍🤍
 - 스트림은 한번 쓰면 다시 못 씀. 일회용 객체임. 스트림을 한번 더 쓰고 싶다면 한번 더 생성해야 함
 
+(참고)
+
+- 배열 -> java.util.Arrays
+- 컬렉션 -> java.util.Collections
+
+- 데이터 소스(배열, 컬렉션)가 무엇이든지 간에 스트림 객체가 되면 동일한 방식으로 처리 + 편의기능
+
 ❤️스트림의 목적
 
 - 1. 데이터 소스가 무엇이든지간에(배열이든 컬렉션이든)
@@ -76,9 +83,10 @@ stream 객체를 나열식으로 만들 수 있음
 1. 중간연산
 
    - 스트림 중간 부분에 정의된 메서드
-   - 반환값이 Stream인 형태인 경우(일반 스트림 - Stream<E>, 기본 자료형 스트림 - IntStream, LongStream, DoubleStream)
+   - 반환값이 Stream인 형태인 경우(일반 스트림 - Stream<E>, 기본 자료형 스트림
+   - IntStream, LongStream, DoubleStream)
    - 최종 연산이 호출될때까지는 연산이 되지 않음
-   - 최종연산이 호출되어야 수행되는 연산
+   - 최종연산이 호출되어야(수행되어야) 수행되는 연산
    - 처리할 작업을 나열하듯이 정의 - 메서드 체이닝
 
 2. 최종연산
@@ -86,10 +94,13 @@ stream 객체를 나열식으로 만들 수 있음
    - 가장 끝에 추가된 메서드인 경우가 많음
    - 반환값이 Stream이 아닌 형태
    - 스트림이 소비되면서 연산이 수행되고 작업이 완료
+   - 호출되면 중간연산도 함께 수행, 연산 종료
    - 반환값이 Stream이 아닌 경우 (int, long, boolean, Optional ...)
 
 3. 지연된연산 = 중간연산
-   중간 연산은 최종 연산이 호출되어야 스트림을 소비하면서 연산이 진행됨. 중간연산을 지연된 연산이라고 하기도 함
+
+   - 중간 연산은 최종 연산이 호출되어야 스트림을 소비하면서 연산이 진행됨
+   - 중간연산을 지연된 연산이라고 하기도 함
 
 💛Stream 문서를 보고 반환값에 stream이 들어 있으면 중간연산에 나열하여 사용할 수 있고, 반환값에 stream이 없으면 최종연산에 사용하여 연산을 함(마지막에 최종연산이 호출되어야 연산이 진행됨)🤍🤍🤍
 
@@ -140,18 +151,21 @@ IntSummaryStatistics summaryStatistics()
    Stream.of(T.... ) : 일반스트림, 기본 자료형 스트림
 
 1) 특정 범위의 정수
-   기본 자료형 스트림
-   range(....)
-   rangeClosed(...)
+   기본 자료형 스트림(IntStream, LongStream)
+   횟수가 정해진 반복을 할 때
+   range(int s, int e) : s 이상 e 미만
+   rangeClosed(int s, int e) : s 이상 e 이하
 
 2) 임의의 수
    java.util.Random
    무한 스트림 - 갯수 제한이 필요
-   IntStream ints(); : 정수범위 난수
-   LongStream longs() :
+   IntStream ints() : 정수범위 난수
+   LongStream longs()
    DoubleStream doubles() : 실수 범위 난수
 
 3) 람다식 - iterate(), generate()
+   iterate() - 매개변수가 있고, 값을 만들어서 반복
+   generate() - 매개변수가 없고 그냥 반복
 
    - 무한스트림
 
@@ -161,57 +175,90 @@ IntSummaryStatistics summaryStatistics()
 
 1)  skip(), limit()
 
-limit() : 갯수 제한
-skip() : 건너 뛰기
+- limit() : 갯수 제한
+- skip() : 건너 뛰기
 
 2. filter(), distinct()
-   filter(Predicate<T> ...) : 스트림을 걸러주는 기능
 
-distinct() : 중복 제거 - 중복 제거 기준 : equals() and hashCode()
+   - filter(Predicate(판별식)<T> ...) : 스트림을 걸러주는 기능
+   - distinct() : 중복 제거
+   - 중복 제거 기준 : ★equals() and hashCode()★
 
 3. sorted()
+
    - 정렬 : 기본 정렬 기준 java.lang.Comparable int compareTo(...)
    - sorted(Comparator ....)
      - 대안적인 기준 : java.util.Comparator :: int compare(....)
-4. map()
-   map(Function<T,R> ...) : 변환 메서드
-5. peek()
+
+4. map() - 변환작업
+
+   - map(Function<T,R> ...) : 변환 메서드
+   - (참고) 기본 자료형 스트림 변환 메서드
+     IntStream - mapToInt(ToIntFunction<T> ..)
+     LongStream - mapToLong(ToLongFunction<T> ..)
+     DoubleStream - mapToDouble(ToDoubleFunction<T>..)
+
+5. peek() - 스트림 내용 확인
 
    - forEach와 매개변수가 동일
-   - Stream peek(Consumer<T> ... ) : 중간 연산 : 중간에 값을 확인할 경우 많이 사용
-   - void forEach(Consumer<T> ...) : 최종 연산 : 최종적으로 출력할때 사용
+   - Stream peek(Consumer<T> ... ) : 중간 연산 - 중간에 값을 확인할 경우 많이 사용
+   - void forEach(Consumer<T> ...) : 최종 연산 - 최종적으로 출력할때 사용
 
 6. mapToInt(), mapToLong(), mapToDouble()
 
-Optional 클래스
+❤️Optional 클래스
 
 - JDK8
 - null에 대한 다양한 처리 방법을 제공하는 클래스
-- Wrapper 클래스
+- Wrapper 클래스 -> 값을 체크해보고 대안을 제공하기 위해 감싼 형태임
+- orElse(T other) : 값만 기본 값으로 내보내기
+- 값을 조금 더 가공, 처리할 필요가 있을 땐? 함수형 인터페이스
+- 함수를 가지고 통제함
+- orElseGet(Supplier<T> ..)
 
+```Java
 class Optional<T> {
 ...
 private final T value;
 ...
 }
+```
+
+🤍Optional 클래스란?
+
+- Null값에 대한 다양한 처리방식을 제공하는 클래스(편의기능 클래스)
+- Null에 대한 다양한 처리방식 제공 -> 그러면 내부에 값이 있어야 체크가 가능
+- 반환값이 Optional인 이유는 Null값이 발생할 수 있기 때문임 -> 이를 처리하기 위해 null에 대한 처리를 위해 Optional로 반환값이 나온것
+
+🤍목적
+
+- NullPointerException은 개발자를 가장 힘들게 함 -> 서비스 중단
+- 자바는 NPE에 취약한 언어
+- 참고로 코틀린은 NPE에 해방
+
+🤍특징
+
+- 값이 null인지 아닌지를 체크해 보려면 값을 가지고 있어야 함
+- 그렇기 때문에 값을 감싼 형태인 Wrapper클래스의 일종
 
 1. Optional 객체 생성하기
    static Optional<T> of(T t) : t가 null이면 오류 발생
    static Optional<T> ofNullable(T t) : t가 null이어도 오류 발생 X
+
 2. Optional 객체의 값 가져오기
 
-   T get() : null 이면 오류 발생
+   T get() : null 이면 오류 발생(NoSuchElementException 발생)
    T orElse(T other) : null이 아니면 값 반환, null이면 other 반환
-   T orElseGet(Supplier<T ... > )
-   T orElseThrow() : null이면 예외 발생
-   T orElseThrow(Supplier<T ... > )
+   T orElseGet(Supplier<T ... > ) : null이 아니면 값 반환, null이면 Supplier::get() 함수에서 생성한 값을 반환, 값에 대한 변경, 코드 추가가 필요한 경우 또는 코드를 짧게 쓸 때 사용
+   T orElseThrow() : null이면 예외 발생(NoSuchElementException 발생)
+   T orElseThrow(Supplier<T ... > ) :null이면 Supplier의 get() 생성한 예외를 발생
 
 3. OptionalInt, OptionalLong, OptionalDouble
 
 - 기본형을 처리하는 Optional 클래스
 - 오토박싱, 언박싱이 발생 X -> 성능상의 이점
 
-3. 스트림의 최종 연산
+❤️스트림의 최종 연산
 
 - 최종 연산이 호출되어야 중간 연산도 수행, 스트림을 소비
 
