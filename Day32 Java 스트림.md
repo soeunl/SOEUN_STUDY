@@ -238,8 +238,8 @@ private final T value;
 
 🤍특징
 
-- 값이 null인지 아닌지를 체크해 보려면 값을 가지고 있어야 함
-- 그렇기 때문에 값을 감싼 형태인 Wrapper클래스의 일종
+- 값이 null인지 아닌지를 체크해 보려면 값을 체크하는 가지고 있어야 함
+- 그렇기 때문에 값을 감싸서 기능을 부여하는 형태인 Wrapper클래스의 형태로 사용함
 
 1. Optional 객체 생성하기
    static Optional<T> of(T t) : t가 null이면 오류 발생
@@ -248,36 +248,89 @@ private final T value;
 2. Optional 객체의 값 가져오기
 
    T get() : null 이면 오류 발생(NoSuchElementException 발생)
-   T orElse(T other) : null이 아니면 값 반환, null이면 other 반환
-   T orElseGet(Supplier<T ... > ) : null이 아니면 값 반환, null이면 Supplier::get() 함수에서 생성한 값을 반환, 값에 대한 변경, 코드 추가가 필요한 경우 또는 코드를 짧게 쓸 때 사용
+   T orElse(T other) : null이 아니면 값 반환, null이면 other 반환(기본환)
+   T orElseGet(Supplier<T ... > ) : null이 아니면 값 반환, null이면 Supplier::get() 함수에서 생성한 값을 반환, 값에 대한 변경, 코드 추가가 필요한 경우 또는 코드를 짧게 쓸 때 사용, 메서드(함수)정의 - 복잡한 반환값을 생성해야 하는 경우
    T orElseThrow() : null이면 예외 발생(NoSuchElementException 발생)
-   T orElseThrow(Supplier<T ... > ) :null이면 Supplier의 get() 생성한 예외를 발생
+   T orElseThrow(Supplier<T ... > ) : null이면 Supplier의 get() 생성한 예외를 발생. 직접 정의한 예외가 발생
 
-3. OptionalInt, OptionalLong, OptionalDouble
+   (참고) API 문서 : 반환값 타입 Optional인 경우 : 결과가 null일 가능성이 있는 메서드
+
+❤️OptionalInt, OptionalLong, OptionalDouble
 
 - 기본형을 처리하는 Optional 클래스
 - 오토박싱, 언박싱이 발생 X -> 성능상의 이점
+- 기본형으로 연산을 하는 것이 더욱 효율적이기 때문임
+
+(참고)
+중간 연산 flapMap : 중첩된 스트림을 -> 일차원적 스트림으로 변환
 
 ❤️스트림의 최종 연산
 
 - 최종 연산이 호출되어야 중간 연산도 수행, 스트림을 소비
 
-1. forEach()
+1. forEach(Consumer<T>..)
+
+   - 반복 작업 수행
 
 2. allMatch(), anyMatch(), noneMatch(), findFirst(), findAny()
 
-boolean allMatch(Predicate ... ) : 전부 참인 경우 참
-boolean anyMatch(Predicate ...) : 어떤 것이든 하나라도 참이면 참
-boolean noneMatch(Predicate ...) : 전부 거짓일때 참
-T findFirst() : 가장 첫번째 스트림의 요소를 반환
+   - boolean allMath(Predicate ..) : 모든 요소가 조건에 참일때 참
+     (참고) 자바스크립트 배열 객체 every와 비슷
+
+   - bollean anyMath(Predicate ..) : 어떤 요소든 조건이 하나라도 참이면 참
+     (참고) 자바스크립트 배열 객체 some과 비슷
+
+   - boolean noneMatch(Predicate ...) : 전부 거짓일때 참
+
+   - T findFirst() : 가장 첫번째 스트림의 요소를 반환
+
+   (참고)
+   findAny() : 병렬 스트림인 경우 가장 먼저 나오는 요소
 
 3. count(), sum(), average(), max(), min()
 
+   - long count() : 요소의 갯수 - 일반 스트림(Stream<T>), 기본 자료형 스트림(IntStream, LongStream, DoubleStream)
+
+   기본자료형 스트림(IntStream, LongStream, DoubleStream) - 여기만 있음
+
+   - long sum() : 합계
+
+   - OptionalDouble average() : 평균
+
 4. reduce()
+
+   - 반환값이 계속 첫번째 매개변수로 들어간다. 초기값이 있는 경우에는 초기값이 가장 먼저 들어감
+
+   - max() : 최댓값
+   - min() : 최솟값
 
 5. collect()
    Collector
 
-   java.util.stream.Collectors 6) toList(), toSet(), toMap(), toCollection(), toArray() - toMap() : - toCollection() : List, Set의 하위 클래스 객체 7) joining()
+   java.util.stream.Collectors
+
+   - toList(), toSet(), toMap(), toCollection(), toArray()
+   - toMap() : Map 형태로 변환
+   - toCollection() : List, Set의 하위 클래스 객체
+     만약 ArrayList로 변환? HashSet, TreeSet로 변환? 이때는 toCollection 사용
+   - joining() : 스트림 요소를 특정 문자로 결합해서 문자열로 생성
 
 6. groupingBy(), partitioningBy()
+
+   - groupingBy() : 특정 값을 가지고 그룹
+   - partitioningBy() : 양분(조건이 참인것과 거짓인것으로 조건이 참인지 거짓인지 양분)
+
+7. flatMap()
+
+   - 평탄화작업
+   - 중간연산
+
+   ```Java
+    List<String> names = Arrays.asList("이름1", "이름2", "이름3");
+    List<String> fruits = Arrays.asList("Apple", "Orange", "Melon");
+
+    Stream<Stream<String>> stm = Stream.of(names.stream(), fruits.stream());
+
+    String[] strs = stm.flatMap(s -> s).toArray(String[]::new);
+        System.out.println(Arrays.toString(strs));
+   ```
