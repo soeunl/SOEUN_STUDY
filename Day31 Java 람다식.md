@@ -44,6 +44,32 @@
 4.  구현코드가 한줄일때는 { ... } 생략 가능, return 예약어도 생략 가능
 5.  최대한 짧게 쓰는 방향(변수명도 한 글자로 하는 것이 권장)
 
+```Java
+
+기존 메서드 방식
+public int square(int num) {return num * num;}
+
+람다식 방식
+int square = x -> x * x;  // square.square(10)
+
+```
+
+```Java
+
+기존 메서드 방식
+IntUnaryOperator oper = new IntUnaryOperator() {
+
+   public int apply(int num) {
+      return num * num;
+   }
+};
+
+람다식 방식
+IntUnaryOperator oper = x -> x * x;
+int result = oper.apply(10);
+
+```
+
 ❤️함수형 인터페이스(Functional Interface)
 
 - 단일 기능🤍, 단일 역할🤍, 하나의 역할만 수행할 수 있는 형식상 제한 조건이 있음 : 추상메서드를 1개만 정의
