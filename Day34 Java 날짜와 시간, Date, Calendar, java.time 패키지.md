@@ -37,7 +37,7 @@ JDK8
 1. 설계의 보완
 
 🤍 인터페이스
-Temporal, TemporalAccessor(조회), TemporalAdjuster(변경)
+💙Temporal, TemporalAccessor(조회), TemporalAdjuster(변경)
 
 - LocalDate, LocalTime, LocalDateTime, ZonedDateTime, OffsetDateTime, Instant
 
@@ -61,10 +61,10 @@ TemporalUnit : 날짜, 시간 단위
 
 🤍 java.time : 핵심 클래스
 
-1. Temporal, TemporalAccessor(조회), TemporalAdjuster(변경) 인터페이스
+1. 💙 Temporal, TemporalAccessor(조회), TemporalAdjuster(변경) 인터페이스
    직접 생성자를 통해서는 만들지 못한다. 지역마다 다르기 때문에
 
-LocalDate : 날짜
+💙 LocalDate : 날짜
 LocalDateTime atTime(시간....) : 날짜 + 시간
 
 static LocalDate now() : 지금 현재 날짜
@@ -83,40 +83,47 @@ with(..) : 날짜 변경
 plus(..) : 날짜 더하기
 minus(..) : 날짜 빼기
 
-LocalTime : 시간
+💙 LocalTime : 시간
 LocalDateTime atDate(LocalDate ...) : 시간 + 날짜
 
-LocalDateTime : 날짜(LocalDate) + 시간(LocalTime)
+💙 LocalDateTime : 날짜(LocalDate) + 시간(LocalTime)
 ZonedDateTime atZone(ZoneId ...) : 날짜 + 시간 + 시간대
 OffsetDateTime atOffset(ZoneOffset ...)
 
-ZonedDateTime : 날짜와 시간(LocalDateTime) + 시간대(ZoneId - Asia/Seoul) - 섬머 타임제 고려
+💙 ZonedDateTime : 날짜와 시간(LocalDateTime) + 시간대(ZoneId - Asia/Seoul) - 섬머 타임제 고려
 
-OffsetDateTime : 날짜와 시간(LocalDateTime) + 시간대(ZoneOffset - +9)
+💙 OffsetDateTime : 날짜와 시간(LocalDateTime) + 시간대(ZoneOffset - +9) UTC : 세계 표준 협정시
 
-Instant : EpochTime - 1970. 1. 1 자정부터(UTC+0) 1/1000 단위 카운트
+Instant : EpochTime - 1970. 1. 1 자정부터(UTC+0) 1/1000 단위 카운트한 정수
+
+(참고)
+Date 클래스 -> Instant
+toInstant()
 
 (참고) Timestamp - 초 단위 카운팅
 : Date 클래스로 만들어진 객체 -> 변환(Date클래스에 toInstant())
 
 2.  TemporalAmount 인터페이스
-    Duration : 시간의 차이 (초, 나노 초)
+    Duration : 시간의 간격 (초, 나노 초)
     between
     until
-    Period : 날짜의 차이
+    -> LocalTime
+    Period : 날짜 사이의 간격(년, 월, 일)
 
 - java.time.format : 형식화 클래스
   DateTimeFomatter
+
 - java.time.temporal : 날짜, 시간의 단위, 필드
   TemporalField 인터페이스 - 필드 - ChronoField
   TemporalUnit 인터페이스 - 단위 - ChronoUnit
+
 - java.time.zone : 시간대 관련 클래스
   ZoneId
   ZoneOffset
 
-1. java.time 패키지의 핵심 클래스
+🤍 java.time 패키지의 핵심 클래스
 
-1) LocalDate와 LocalTime
+1. LocalDate와 LocalTime
 
 - 특정 필드의 값 가져오기 - get(), getXXX()
   int get(필드 명);
@@ -133,21 +140,40 @@ Instant : EpochTime - 1970. 1. 1 자정부터(UTC+0) 1/1000 단위 카운트
 
 2. Period와 Duration
 
+- Period : 날짜 사이의 간격(년, 월, 일)
+- Duration : 시간의 간격 (초, 나노 초)
+
 3. 객체 생성하기 - now(), of()
-   now() : 현재 날짜,시간
-   of(....)
+
+- now() : 현재 날짜,시간
+- of(....)
 
 4. Temporal과 TemporalAmount
 
 5. Instant
 
-파싱과 포맷
+- Instant : EpochTime - 1970. 1. 1 자정부터(UTC+0) 1/1000 단위 카운트한 정수
+
+🤍 파싱과 포맷
 java.time.format
 
 1. parse()
    형식화 문자열 -> 날짜/시간
+
    - 핵심 클래스 (LocalDate, LocalTime, LocalDateTime ... )
+
 2. format() : 날짜/시간 -> 형식화 문자열
    DateTimeFormatter
-   DateTimeFormatter state ofPattern("패턴")
-   .format(TemporalAccessor ...)
+   - ofPattern("패턴")
+   - format(..) : 자바 객체 -> 형식화된 문자열 변경
+   - parse(..) : 형식화된 문자열 -> 자바 객채
+     DateTimeFormatter state ofPattern("패턴")
+     .format(TemporalAccessor ...)
+
+(과제)
+
+java.time 패키지를 써서 
+콘솔에 년과 월을 입력하면
+달력이 나오도록 만들기
+틀은 제공해주심
+내일까지!!
