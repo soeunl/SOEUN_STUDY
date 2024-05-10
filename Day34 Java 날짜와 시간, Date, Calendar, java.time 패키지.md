@@ -166,13 +166,13 @@ java.time.format
    DateTimeFormatter
    - ofPattern("패턴")
    - format(..) : 자바 객체 -> 형식화된 문자열 변경
-   - parse(..) : 형식화된 문자열 -> 자바 객채
+   - parse(..) : 형식화된 문자열 -> 자바 객체
      DateTimeFormatter state ofPattern("패턴")
      .format(TemporalAccessor ...)
 
 (과제)
 
-java.time 패키지를 써서 
+java.time 패키지를 써서
 콘솔에 년과 월을 입력하면
 달력이 나오도록 만들기
 틀은 제공해주심
