@@ -81,7 +81,8 @@ SELECT DEPTNO, ROUND (AVG(SAL)) FROM EMP GROUP BY DEPTNO;
 2. GROUP BY절을 사용할 때 유의점
 
 - 다중행 함수를 사용하지 않은 일반 열은 GROUP BY절에 명시하지 않으면 SELECT 절에서 사용할 수 없다는 것
-- GROUP BY절에 없는 열을 SELECT절에 포함했을 경우
+- GROUP BY절에 없는 열은 SELECT절에 포함할 수 없음
+- 레코드와 기준에 맞지 않는 열에는 사용이 불가 (예) 사원 이름
 
 🤍 GROUP BY절에 조건을 줄 때 사용하는 HAVING절
 

@@ -23,7 +23,7 @@
 
 1. COMMIT : DB에 영구 반영
 
-2. ROLLBACK :
+2. ROLLBACK : COMMIT 이전 복구
 
 - COMMIT 전에 실행하면 복구됨
 - COMMIT 후에는 DB에 영구 반영되었으므로 복구할 수 없음
