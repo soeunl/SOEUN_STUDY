@@ -1,114 +1,85 @@
 <Day38- 0513>
-<Database 서브쿼리>
+<Database 데이터 조작어>
 
-## SQL문 속 또 다른 SQL문, 서브 쿼리
+## 데이터를 추가, 수정, 삭제하는 데이터 조작어
 
-❤️ 서브 쿼리
+❤️ 테이블에 데이터 추가하기
 
-1. 스칼라 서브쿼리
-   스칼라 : 단일 값
+🤍INSERT : 추가
+🤍UPDATE : 수정
+🤍DELETE : 삭제
 
-2. 인라인 뷰 : 가상의 테이블
+1. 테이블 생성하기
+   CREATE TABLE 테이블명 AS SELECT...
 
-3. 상관 부속 질의
+   (참고) DDL
+   CTEATE 대상 - 생성
+   ALTER 대상 - 수정
+   DROP 대상 - 삭제
+   DDL은 실행과 동시에 COMMIT 진행, 데이터 바로 반영, ROLLBACK 불가
 
-4. 특징
+   (참고2)
+   DML은 COMMIT하면 영구 반영 된다. DML만 가능. COMMIT 전에는 ROLLBACK이 가능
 
-1) 서브 쿼리는 연산자와 같은 비교 또는 조회 대상의 오른쪽에 놓이며 괄호 ( )로 묶어서 사용합니다. (소괄호)
-   SELECT \* FROM EMP
-   WHERE SAL <(SELECT MIN(SAL)FROM EMP WHERE DEPTNO =30)
-2) 특수한 몇몇 경우를 제외한 대부분의 서브쿼리에서는 ORDER BY 절을 사용할 수 없습니다.
-3) 서브쿼리의 SELECT절에 명시한 열은 메인쿼리의 비교 대상과 같은 자료형과 같은 개수로 지정해야 합니다. 즉 메인쿼리의 비교 대상 데이터가 하나라면 서브쿼리의 SELECT절 역시 같은 자료형인 열을 하나 지정해야 합니다.
-4) 서브쿼리에 있는 SELECT문의 결과 행 수는 함께 사용하는 메인쿼리의 연산자 종류와 호환 가능해야 합니다. 예를 들어 메인쿼리에 사용한 연산자가 단 하나의 데이터로만 연산이 가능한 연산자라면 서브쿼리의 결과 행 수는 반드시 하나여야 합니다.
-5) 서브쿼리는 성능저하가 올 수 있어서 신중히 사용해야 한다.
+2. 문법
+   INSERT INTO 테이블명 (컬럼1, 컬럼2, ...) VALUES (값1, 값2...);
+   INSERT INTO DEPT_TEMP (DEPTNO, DNAME, LOC)
+   VALUES (50, 'WEB', 'SEOUL');
 
-❤️ 실행 결과가 하나인 단일행 서브 쿼리
+   - (컬럼1, 컬럼2,...) : 전체 데이터를 추가하는 상황, 컬럼의 순서가 동일한 경우 생략 가능
+     INSERT INTO DEPT_TEMP VALUES (60, 'DATABASE', 'INCHEON');
+   - 값 : 문자 -> '값'
+   - 숫자 - 값
 
-1. 단일행 서브 쿼리(single-row subquery)는 실행 결과가 단 하나의 행으로 나오는 서브쿼리를 뜻합니다.
-2. 서브쿼리에서 출력되는 결과가 하나이므로 메인쿼리와 서브쿼리 결과는 다음과 같이 단일행 연산자를 사용하여 비교 - 비교연산자
-3. 단일행 서브쿼리와 날짜형 데이터
-4. 단일행 서브쿼리와 함수
+❤️ 테이블에 NULL 테이터 입력하기
 
-❤️ 실행 결과가 여러 개인 다중행 서브 쿼리
+- NULL을 지정하여 입력하기
+- 빈 공백 문자열로 NULL을 입력하기
+- 열 데이터를 넣지 않는 방식으로 NULL 데이터 입력하기
+- (참고) MYSQL : 비어있는 문자열 데이터
+- (참고) 특정 필드가 비어 있는지 체크? 필드명 <> ''AND 필드명 IN NOT NULL;
 
-1. 다중행 서브쿼리(multiple-row subquery)는 실행 결과 행이 여러 개로 나오는 서브쿼리를 가리킵니다.
-2. 단일행 서브쿼리와 달리 서브쿼리 결과가 여러 개이므로 단일행 연산자는 사용할 수 없고 다중행 연산자를 사용해야 메인쿼리와 비교할 수 있습니다.
-3. IN 연산자 - 부서별 최대 급여 직원 목록
-4. ANY, SOME 연산자 - 쿼리 결과값이 하라나도 참이면 참, 30번 부서의 최대 급여보다 적게 받는 직원 목록
-5. ALL 연산자 - 쿼리 결과값이 모두 참일때 참, 30번 부서의 최대급여보다 많이 받는 직원 목록
-6. EXISTS 연산자 - 서브쿼리의 레코드가 있으면 참, 30번 부서가 부서테이블에 목록하면 직원 목록을 출력
+❤️ 테이블에 날짜 데이터 입력하기
 
--- 30번 부서의 최소 급여보다 더 많이 받는 직원 목록
-SELECT \* FROM EMP
-WHERE SAL > (SELECT MIN(SAL) FROM EMP WHERE DEPTNO=30);
+- INSERT문으로 날짜 데이터 입력하기(날짜 사이에 / 입력)
+- INSERT문으로 날짜 데이터 입력하기(날짜 사이에 - 입력)
+- TO_DATE 함수를 사용하여 날짜 데이터 입력하기
+- SYSDATE를 사용하여 날짜 데이터 입력하기
 
-SELECT \* FROM EMP
-WHERE SAL > ANY (SELECT SAL FROM EMP WHERE DEPTNO=30);
+(참고) 자료형 변환 함수
 
-SELECT SAL FROM EMP WHERE DEPTNO=30 ORDER BY SAL DESC;
+- TO_NUMBER(..) : 형식화된 문자열 숫자 -> 숫자
+- TO_DATE(..) : 형식화된 문자열 날짜 -> 날짜
+- TO_CHAR(..) : 숫자, 문자 -> 형식화된 문자열
 
--- 30번 부서의 최소 급여보다 적게 받는 직원 목록
-SELECT \* FROM EMP
-WHERE SAL < (SELECT MAX(SAL) FROM EMP GROUP BY DEPTNO=30);
+❤️ 서브 쿼리를 사용하여 한 번에 여러 데이터 추가하기
 
-SELECT \* FROM EMP
-WHERE SAL < ANY (SELECT SAL FROM EMP WHERE DEPTNO=30);
+1. 서브 쿼리로 여러 데이터 추가하기
+   -- 테이블이 이미 있는 경우, 데이터만 일괄 추가 /서브쿼리 형태/ 컬럼명 등이 일치해야함
+   INSERT INTO DEPT_TEMP2 (SELECT \* FROM DEPT);
+2. INSERT문에서 서브쿼리를 사용할 때 유의할 점
+   - VALUES 절은 사용하지 않는다.
+   - 데이터가 추가되는 테이블의 열 개수와 서브쿼리의 열 개수가 일치해야 한다.
+   - 데이터가 추가되는 테이블의 자료형과 서브쿼리의 자료형이 일치해야 한다.
 
-SELECT SAL FROM EMP WHERE DEPTNO=30 ORDER BY SAL DESC;
+❤️ 테이블에 있는 데이터 수정하기
 
--- 30번 부서의 최대 급여보다 더 많이 받는 직원 목록
-SELECT \* FROM EMP
-WHERE SAL > (SELECT MAX(SAL) FROM EMP WHERE DEPTNO=30);
+- UPDATE문을 사용
 
-SELECT \* FROM EMP
-WHERE SAL > ALL (SELECT SAL FROM EMP WHERE DEPTNO=30);
+1. UPDATE 문의 기본 사용법
+2. 데이터 전체 수정하기
+   (참고) ROLLBACK
+3. 데이터 일부분 수정하기
 
-SELECT SAL FROM EMP WHERE DEPTNO=30 ORDER BY SAL DESC;
+❤️ 서브쿼리를 사용하여 데이터 수정하기
 
--- EXISTS 사용
-SELECT \* FROM EMP
-WHERE EXISTS (SELECT \* FROM DEPT WHERE DEPTNO = 30);
+1. 서브쿼리로 데이터 일부분 수정하기
+2. 열 하나하나를 수정하는 경우
+3. UPDATE문의 WHERE절에 서브쿼리 사용하기
 
-SELECT \* FROM EMP
-WHERE EXISTS (SELECT \* FROM DEPT WHERE DEPTNO = 40);
+❤️ 테이블에 있는 데이터 삭제하기
 
-SELECT \* FROM EMP
-WHERE NOT EXISTS (SELECT \* FROM DEPT WHERE DEPTNO = 50);
-
-❤️ 비교할 열이 여러 개인 다중열 서브쿼리
-
-1. 서브쿼리의 SELECT절에 비교할 데이터를 여러 개 지정하는 방식
-2. 다중열 서브쿼리 사용하기
-
-❤️ FROM절에 사용하는 서브쿼리와 WITH절
-
-1. 인라인 뷰(inline view) : 가상 테이블, 서브 쿼리 결과를 가지고 가상 테이블 생성
-   SELECT \* EMPNO, ENAME, D.DNAME
-   FROM(SELECT EMPNO, ENAME, JOB, SAL, DEPTNO
-   FROM EMP WHERE DEPTNO IN (10, 20)) E,
-   (SELECT \* FROM DEPT) D
-   WHERE E.DEPTNO = D.DEPTNO AND E.SAL >= 2000;
-
-2. WITH절 사용하기
-   WITH
-   E AS (SELECT EMPNO, ENAME, JOB, SAL, DEPTNO
-   FROM EMP WHERE DEPTNO IN (10, 20)),
-   D AS (SELECT \* FROM DEPT)
-   SELECT E.EMPNO, E.ENAME, D.DNAME
-   FROM E,D
-   WHERE E.DEPTNO = D.DEPTNO AND E.SAL >= 2000;
-
-3. 상호 연관 서브쿼리 : 메인 쿼리의 결과 데이터를 서브 쿼리에서 사용
-   SELECT \* FROM EMP E1
-   WHERE
-   SAL > (SELECT MIN(SAL) FROM EMP E2 WHERE E1.DEPTNO = E2.DEPTNO);
-
-❤️ SELECT 절에 사용하는 서브쿼리
-
-1. 스칼라 서브쿼리(scalar subquery)
-   스칼라 : 단일값, 단일행 서브쿼리
-2. SELECT절에 서브쿼리 사용하기
-   SELECT EMPNO, ENAME,
-   (SELECT DNAME FROM DEPT D WHERE D.DEPTNO = E.DEPTNO) DNAME,
-   FROM EMP E;
-3. SELECT 절에 명시하는 서브쿼리는 반드시 하나의 결과만 반환하도록 작성
+1. DELETE문의 기본 형식
+   DELECT FROM 테이블명 WHERE 조건식;
+2. WHERE절을 사용하여 데이터 일부분만 삭제하기
+3. 테이블에 있는 전체 데이터 삭제하기
