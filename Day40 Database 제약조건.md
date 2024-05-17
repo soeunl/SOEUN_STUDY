@@ -63,7 +63,9 @@
 4. 이미 생성한 테이블에 제약 조건 지정
 
    (1) NOT NULL 제약 조건의 추가는 ALTER 명령어와 MODIFY 키워드를 사용 - ALTER TABLE 테이블명 MODIFY 키워드를 사용 - ALTER TABLE 테이블명 MODIFY 컬럼명 [자료형][제약조건] - 컬럼명(필수) - 자료형, 제약조건은 적어도 1개 이상
+
    (2) TEL 열에 NOT NULL 제약 조건 추가하기
+
    (3) TEL 열 데이터 수정하기
    (4) NOT NULL 제약조건 추가하기
 
@@ -77,7 +79,9 @@
 1. 요약
 
    (1) 열에 저장할 데이터의 중복을 허용하지 않고자 할 때 사용
+
    (2) NULL은 값이 존재하지 않음을 의미하기 때문에 중복 대상에서는 제외됨
+
    (3) UNIQUE 지정 방법은 NOT NULL 제약 조건과 동일함
 
 2. 테이블을 생성하여 제약 조건 지정
@@ -87,9 +91,13 @@
    (1) TABLE_UNIQUE 테이블에 데이터 중복하여 입력하기
 
 5. UNIQUE 제약 조건과 NULL 값
+
 6. 테이블 생성하며 제약 조건 이름 직접 지정
+
 7. 이미 생성한 테이블에 제약 조건 지정
+
    - ALTER TABLE 테이블명 MODIFY 컬럼명 CONSTRAINT 제약조건이름 UNIQUE;
+
 8. 제약 조건 삭제
    - ALTER
 
@@ -97,7 +105,8 @@
 
 1. 요약
 
-(1) UNIQUE와 NOT NULL 제약 조건의 특성을 모두 가지는 제약 조건(데이터 중복을 허용하지 않고 NULL도 허용하지 않습니다.)
+(1) UNIQUE와 NOT NULL 제약 조건의 특성을 모두 가지는 제약 조건(데이터 중복을 허용하지 않고 NULL도 허용하지 않음)
+
 (2) NULL이 아닌 유일한 값을 가지므로 테이블의 각 행을 식별하는 데 활용
 (3) PRIMARY KEY 제약 조건은 테이블에 하나밖에 지정할 수 없습니다.
 (4) PRIMARY KEY로 지정하면 해당 열에는 자동으로 인덱스가 만들어집니다.
@@ -169,3 +178,7 @@
 2. DEFAULT로 지정한 기본 값이 입력되는 INSERT문 확인하기
 
 ❤️ 제약 조건 비활성화, 활성화
+
+- 제약조건 비활성화와 활성화
+  - ALTER TABLE 테이블명 DISABLE CONSTRAINT 제약조건명; -> 비활성화(DISABLE)
+  - ALTER TABLE 테이블명 ENABLE CONSTRAINT 제약조건명; -> 활성화(ENABLE)

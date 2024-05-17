@@ -12,6 +12,7 @@
 2. 데이터 정의어를 사용할 때 유의점
 
    (1) 데이터 정의어를 실행하면 자동으로 COMMIT되기 때문에 이전에 사용한 데이터 조작어는 영구히 데이터베이스에 반영
+
    (2) ROLLBACK을 통한 실행 취소가 불가
 
 ❤️ 테이블을 생성하는 CREATE
@@ -63,16 +64,16 @@ CREATE TABLE 소유 계정.테이블 이름(
    - 컬럼명(필수)
    - 자료형, 제약조건은 모두 정의해도 되고, 둘중에 하나만 정의해도 됨
 
-4. 특정 열을 삭제할 때 사용하는 DROP
+❤️ 특정 열을 삭제할 때 사용하는 DROP
 
-   - ALTER TABLE 테이블명 DROP COLUMN 컬럼명;
-   - 테이블 이름을 변경하는 RENAME
-   - RENAME 기존 테이블명 TO 새로운 테이블명;
-   - 테이블의 데이터를 삭제하는 TRUNCATE
-   - 테이블 비우기 / DDL 문법 / DELET 구문(DML)과 차이점 = ROLLBACK 불가 (복구불가)
-   - TRUNCATE TABLE 테이블명;
-   - 테이블을 삭제하는 DROP
-   - DROP TABLE 테이블명;
+- ALTER TABLE 테이블명 DROP COLUMN 컬럼명;
+- 테이블 이름을 변경하는 RENAME
+- RENAME 기존 테이블명 TO 새로운 테이블명;
+- 테이블의 데이터를 삭제하는 TRUNCATE
+- 테이블 비우기 / DDL 문법 / DELET 구문(DML)과 차이점 = ROLLBACK 불가 (복구불가)
+- TRUNCATE TABLE 테이블명;
+- 테이블을 삭제하는 DROP
+- DROP TABLE 테이블명;
 
 ❤️ 자료형
 
