@@ -7,18 +7,21 @@
 
 1. 프로세스의 개념
 
-   (1) 실행 중인 프로그램(program)
+   (1) 실행 중인 프로그램(program) ★★★
    (2) 프로그램을 수행하는 데 필요한 데이터와 메모리등의 자원 그리고 쓰레드로 구성
    (3) 프로세스의 자원을 이용해서 실제로 작업을 수행하는 것이 쓰레드임
    (4) 모든 프로세스에는 최소한 하나 이상의 쓰레드가 존재하며, 둘 이상의 쓰레드를 가진 프로세스를 멀티쓰레드 프로세스(multi-threaded process)라고 함
    (5) 프로세스의 메모리 한계에 따라 생성할 수 있는 쓰레드의 수가 결정됨
 
    쓰레드 : 작업 메서드(주 메서드) + 호출 스택 : 작업대 -> 이를 통해 함수가 수행
-   작업 메서드 main : main 쓰레드
+   쓰레드는 작업공간
+
+   작업 메서드 + 호출스택
+   작업 메서드가 main이면? : main 쓰레드
    쓰레드를 여러개 만들면 작업을 분담해서 나누어 할 수 있음
 
-   main() -> 메인 쓰레드
-   run() -> 사용자 정의 쓰레드 : 실행시 호출 스택이 필요하므로 별도 메서드 start() 실행 -> 호출스택 + run() 메서드 실행
+   작업메서드가 main()이라면? -> 메인 쓰레드
+   작업메서드가 run()이라면? -> 사용자 정의 쓰레드 : 실행시 호출 스택이 필요하므로 별도 메서드 start() 실행 -> 호출스택 + run() 메서드 실행
 
 2. 멀티쓰레딩
 
@@ -33,6 +36,7 @@
    (4) 작업이 분리되어 코드가 간결해짐
 
 4. 멀티쓰레딩의 단점
+
    (1) 여러 쓰레드가 같은 프로세스 내에서 자원을 공유하면서 작업을 하기 때문에 발생할 수 있는 동기화(synchronization), 교착상태(deadlock)와 같은 문제를 고려해서 신중하게 프로그래밍해야 함
    (2) 서로의 작업을 착각하지 않도록 유의
 
@@ -40,8 +44,15 @@
 
 1. Thread 클래스를 상속받는 방법과 Runnable 인터페이스를 구현하는 방법
 
-   (1) Thread 클래스 상속
-   (2) Runnable 인터페이스를 구현 -> Thread 생성자 매개변수
+   (1) Thread 클래스 상속, run() 메서드를 정의
+
+   - 유연성에서 불리, 상속은 1개만 받기 때문에
+   - 실무에서는 많이 사용하지 않음
+   - Thread 클래스에 정의된 인스턴스 자원을 하위클래스에서 바로 접근 가능
+
+   (2) Runnable 인터페이스를 구현 -> Thread 객체 생성 시 생성자 매개변수로 설정
+
+   - Runnable 인터페이스 자체로 Thread의 기능은 X
 
 2. Thread클래스를 상속받으면 다른 클래스를 상속받을 수 없기 때문에 Runnable 인터페이스를 구현하는 방법이 일반적임
 
@@ -74,7 +85,16 @@
 
 1. 쓰레드 우선순위 지정하기
 
+- 우선 순위가 높은 경우 = 시간 분할을 더 많이 해서 실행을 더 많이 확보
+- 1 ~ 10 : 10에 가까울수록 우선순위가 높다. 1에 가까울수록 우선순위가 낮다. setPriority
+
+(참고)
+시분할 방식
+
 ❤️ 쓰레드 그룹(thread group)
+
+- 쓰레드 그룹을 설정하지 않으면 모두 main 그룹
+- 우선순위 등, 그룹별로 설정, 하위 그룹과도 일괄 적용
 
 ❤️ 데몬 쓰레드(daemon thread)
 
@@ -83,6 +103,10 @@
 - 백그라운드에서 대기하다가 알게모르게 작업
 - 현재 작업중인 쓰레드의 작업이 종료가 되면 함께 종료되는 쓰레드
 - setDaemon(true)
+- boolean isDaemon()
+  // 쓰레드가 데몬 쓰레드인지 확인한다. 데몬 쓰레드이면 true를 반환한다.
+- void setDaemon(boolean on)
+  // 쓰레드를 데몬 쓰레드로 또는 사용자 쓰레드로 변경한다. 매개변수 on의 값을 true로 지정하면 데몬 쓰레드가 된다.
 
 ❤️ 쓰레드의 실행제어
 
@@ -90,15 +114,60 @@
 2. 쓰레드의 상태
 3. sleep(long millis)
 4. interrupt()와 interrupted()
+
+   - interrupt()
+     : sleep 상태를 깨움. 실행 대기상태로 만듬
+     : 실행 정지 상태인 sleep(), join()를 다시 실행 대기 상태로 변경 (InterruptedException 발생 시킴, interruped() - true)
+
+   - interrupt()
+     : 특정한 쓰레드에게 interrupt 신호를 보내 해당 쓰레드의 실행을 중단, 작업 취소, 강제 종료 등으로 사용
+     : 쓰레드는 인터럽트 발생 여부를 확인할 수 있는 상태 값인 interrupted를 가지고 있으며 디폴트 값은 false
+     : 쓰레드는 자기 자신 및 다른 쓰레드에 interrupt 신호 보내기 가능
+     : interrupt()하는 횟수는 제한이 없으며 인터럽트 할 때마다 쓰레드의 interrupted 상태는 true로 변경
+
+   - interrupt() 호출
+     -> (1) isinterrupted()가 true 변경,
+     (2) interrupted() 호출, InterruptedException도 발생, isInterrupted로 false 변경
+     (다시 실행대기를 할 수 있도록)
+
+   - interrupted() 개요
+     : 쓰레드의 interrupt 상태를 반환하는 정적 메서드
+     : 현재 인터럽트 상태가 true일 경우 true를 반환한 뒤 interrupt 상태를 false로 초기화
+
+   - isInterrupted() 개요
+     : 쓰레드의 인터럽트 상태를 반환하는 인스턴스 메서드
+     : 해당 메서드는 단순히 상태 확인용이기 때문에 인터럽트 상태를 변경하지 않고 계속 유지
+     : 단순히 상태 확인을 하는 용도라면 값을 변경하는 interrupted() 보다는 isInterrupted()를 권장
+
+   - InterruptedException
+     : InterruptedException 예외 발생 시 interrupted() 메서드처럼 interrupted 상태를 false로 초기화
+     : 따라서 interrupted()처럼 다른 곳에서 인터럽트 상태를 참조하고 있다면 예외 구문에서 대상 쓰레드에 다시 interrupt 신호를 보내 true로 바꿔야 할 수도 있음
+     : Thread.sleep(), Thread.join(), Object.wait(), Future.get(), BlockingQueue.take() 상태인 쓰레드 대상으로 interrupt() 메서드가 호출되면 InterruptedException 예외가 발생
+
 5. suspend(), resume(), stop()
-6. yield()
-7. join()
+   suspend() : 일시정지
+   resume() : 재시작
+   stop() : 정지
+   -> 교착상태를 유발할 가능성이 크므로 사용 지양
+6. yield() : 다른 쓰레드에게 작업 양보
+7. join() : join한 쓰레드가 완료 되면 현재 쓰레드가 종료
 
 ❤️ 쓰레드의 동기화
 
 1. synchronized를 이용한 동기화
 
-1) 메서드 전체를 임계영역으로 지정
-2) 특정한 영역을 임계 영역으로 지정
+(1) 메서드 전체를 임계영역으로 지정
+(2) 특정한 영역을 임계 영역으로 지정
 
 2. volatile
+
+(보강)
+
+사용자 정의 쓰레드 구현 방법
+
+1. Thread 클래스 상속 (Runnable 인터페이스 상속받음)
+
+2. Runnable 인터페이스 구현 + Thread 클래스가 객체가 되어야 함
+
+start()는 Thread 꺼를 쓰고 run()은 Runnable꺼를 쓴다.
+.currentThread(); -> 실행과정중인 쓰레드를 알아볼 때 사용하는 메서드
